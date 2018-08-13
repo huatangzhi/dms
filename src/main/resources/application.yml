@@ -1,0 +1,22 @@
+server:
+  port: 8080
+#  ssl:
+#    key-store: .keystore
+#    key-password: 123456
+#    key-store-type: JKS
+#    key-alias: tomcat
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/dms?characterEncoding=utf8&useSSL=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    use-generated-keys: true
+    default-statement-timeout: 3000
