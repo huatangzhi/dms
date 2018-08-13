@@ -85,7 +85,7 @@ public class UserController {
             if (hostHolder.getUser() != null) {
                 resultMap = deviceService.deleteByName(deviceName, hostHolder.getUser().getId());
             } else {
-                resultMap.put("userMsg", "当前用户无权限");
+                resultMap.put("userMsg", "当前的用户无权限");
             }
         } catch (Exception e) {
             logger.error("删除用户异常" + e.getMessage());
