@@ -3,6 +3,8 @@ package com.hikvision.dms.mapper;
 import com.hikvision.dms.model.Device;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface DeviceMapper {
 
@@ -28,5 +30,13 @@ public interface DeviceMapper {
 
     @Select({"select * from ", TABLE_NAME, " where name=#{name}"})
     Device selectByName(String name);
+
+    @Select("<script>"
+            + "select" + SELECT_FIELDS +   " from " + TABLE_NAME + " where id in "
+            + "<foreach item='item' index='index' collection='deviceList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    List<Device> selectByIds(@Param("deviceList") List<Integer> deviceList);
 
 }

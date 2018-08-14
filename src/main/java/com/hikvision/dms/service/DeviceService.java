@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -94,5 +96,16 @@ public class DeviceService {
             reslutMap.put("msg", "删除设备成功");
         }
         return reslutMap;
+    }
+
+    public List<Device> getDeviceByUserId(int userId) {
+        List<Integer> deviceIds = userDeviceMapper.getUserDevicesById(userId);
+        if (!deviceIds.isEmpty()) {
+            List<Device> deviceList = deviceMapper.selectByIds(deviceIds);
+            return deviceList;
+        } else {
+            return null;
+        }
+
     }
 }

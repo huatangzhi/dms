@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>jQuery EasyUI CRUD Demo</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/default/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/demo/demo.css"/>
+    <style type="text/css">
+        #fm{
+            margin:0;
+            padding:10px 30px;
+        }
+        .ftitle{
+            font-size:14px;
+            font-weight:bold;
+            color:#666;
+            padding:5px 0;
+            margin-bottom:10px;
+            border-bottom:1px solid #ccc;
+        }
+        .fitem{
+            margin-bottom:5px;
+        }
+        .fitem label{
+            display:inline-block;
+            width:80px;
+        }
+    </style>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var url = "/user/viewDevices";
+            $.get(url, function (data) {
+                var jsonData = JSON.parse(data.toString())
+                if (jsonData.emptyMsg != null) {
+                    // $("#table-div").hide();
+                    alert(jsonData.emptyMsg);
+                }
+            })
+
+
+        });
+
+    </script>
+</head>
+
+
+<body>
+
+<div class="demo-info" style="margin-bottom:10px">
+    <div class="demo-tip icon-tip">&nbsp;</div>
+</div>
+
+<div id="table-div">
+    <table id="dg" title="我的设备" class="easyui-datagrid" style="width:700px;height:250px"
+           url="/user/viewDevices"
+           method="get"
+           toolbar="#toolbar" pagination="true"
+           rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+        <tr>
+            <th field="name" width="50">设备名称</th>
+            <th field="indexCode" width="50">设备类型编号</th>
+            <th field="resourceType" width="50">设备资源类型</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+
+
+    <div id="toolbar">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">添加设备</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">编辑设备</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="removeUser()"> 删除设备</a>
+</div>
+</body>
+</html>

@@ -13,6 +13,16 @@ spring:
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 
+  thymeleaf:
+    cache: false
+    check-template: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+
 
 mybatis:
   configuration:
