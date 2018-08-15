@@ -20,8 +20,8 @@ public class DMSConfiguration  extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(adminPassportInterceptor).addPathPatterns("/admin/addUser");
-        registry.addInterceptor(adminLoginRequiredInterceptor).addPathPatterns("/admin/addUser","/admin/delUser", "/admin/updateUserPassword");
-        registry.addInterceptor(userLoginRequiredInterceptor).addPathPatterns("/user/addDevice","/user/delDevice", "/user/viewDevices");
+        registry.addInterceptor(adminLoginRequiredInterceptor).addPathPatterns("/admin/addUser","/admin/delUser", "/admin/updateUser");
+        registry.addInterceptor(userLoginRequiredInterceptor).addPathPatterns("/user/addDevice","/user/delDevice", "/user/viewDevices","/user/updateDevice");
         super.addInterceptors(registry);
     }
 }

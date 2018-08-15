@@ -44,14 +44,14 @@ public class UserLoginRequiredInterceptor implements HandlerInterceptor {
             LoginTicket loginTicket = loginTicketMapper.selectByTicket(ticket);
 
             if (loginTicket == null || loginTicket.getExpired().before(new Date()) || loginTicket.getStatus() != 0) {
-                httpServletResponse.sendRedirect("/reglogin?" + httpServletRequest.getRequestURI());
+                httpServletResponse.sendRedirect("/");
                 return false;
             }
             User user = userMapper.selectById(loginTicket.getUserId());
             hostHolder.setUser(user);
             return true;
         }
-        httpServletResponse.sendRedirect("/reglogin?" + httpServletRequest.getRequestURI());
+        httpServletResponse.sendRedirect("/");
         return false;
     }
 

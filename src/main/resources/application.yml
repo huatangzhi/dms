@@ -30,3 +30,4 @@ mybatis:
     cache-enabled: true
     use-generated-keys: true
     default-statement-timeout: 3000
+

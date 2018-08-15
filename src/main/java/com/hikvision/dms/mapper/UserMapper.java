@@ -11,7 +11,7 @@ public interface UserMapper {
     String TABLE_NAME = "user";
     String INSET_FIELDS = " name, password, salt";
     String SELECT_FIELDS = " id, name, password, salt";
-    String VIEW_FIELDS = " id, name";
+    String VIEW_FIELDS = " id, name, password";
 
 
     @Insert({"insert into ", TABLE_NAME, "(", INSET_FIELDS,

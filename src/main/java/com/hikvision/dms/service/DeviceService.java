@@ -71,6 +71,23 @@ public class DeviceService {
         return resultMap;
     }
 
+    public Map<String, Object> updateDeviceByName(String name, int indexCode, String resourceType) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        if (deviceMapper.deleteByName(name) != 0){
+            Device device = new Device();
+            device.setName(name);
+            device.setIndexCode(indexCode);
+            device.setResourceType(resourceType);
+            deviceMapper.addDevice(device);
+            resultMap.put("msg", "设备更新成功");
+
+        } else {
+            resultMap.put("msg", "设备更新失败");
+        }
+        return resultMap;
+    }
+
     public Map<String, Object> getDeviceByName(String name) {
         Map<String,Object> reslutMap = new HashMap<String, Object>();
         Device device = selectDeviceByName(name);

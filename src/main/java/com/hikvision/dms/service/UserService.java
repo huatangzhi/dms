@@ -1,9 +1,12 @@
 package com.hikvision.dms.service;
 
+import com.hikvision.dms.mapper.DeviceMapper;
 import com.hikvision.dms.mapper.LoginTicketMapper;
+import com.hikvision.dms.mapper.UserDeviceMapper;
 import com.hikvision.dms.mapper.UserMapper;
 import com.hikvision.dms.model.LoginTicket;
 import com.hikvision.dms.model.User;
+import com.hikvision.dms.model.UserDeviceRecord;
 import com.hikvision.dms.util.SHA256Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,12 @@ public class UserService {
 
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+
+    @Autowired
+    private DeviceMapper deviceMapper;
+
+    @Autowired
+    private UserDeviceMapper userDeviceMapper;
 
     public User selectByName(String name) {
         return userMapper.selectByName(name);
@@ -73,9 +82,13 @@ public class UserService {
         User user = userMapper.selectByName(userName);
         if ( user != null) {
             userMapper.deleteById(user.getId());
+
             if (loginTicketMapper.selectByUserId(user.getId()) != null) {
                 loginTicketMapper.delTicket(user.getId());
             }
+//            List<Integer> deviceIds = userDeviceMapper.getUserDevicesById(user.getId());
+//            deviceMapper.de
+
             resultMap.put("msg", "用户删除成功");
         } else {
             resultMap.put("msg", "没有该用户");

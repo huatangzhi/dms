@@ -75,7 +75,7 @@ public class UserController {
                 resultMap.put("userMsg", "当前用户无权限");
             }
         } catch (Exception e) {
-            logger.error("添加管理员用户异常" + e.getMessage());
+            logger.error("用户添加设备" + e.getMessage());
             resultMap.put("errorMsg", "服务器错误");
         }
         return resultMap;
@@ -84,17 +84,40 @@ public class UserController {
     @ApiOperation(value="删除设备",notes = "用户删除设备")
     @RequestMapping(value = "/delDevice", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> delUser(@RequestParam String deviceName) {
+    public Map<String, Object> delUser(@RequestParam String name) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             if (hostHolder.getUser() != null) {
-                resultMap = deviceService.deleteByName(deviceName, hostHolder.getUser().getId());
+                resultMap = deviceService.deleteByName(name, hostHolder.getUser().getId());
             } else {
                 resultMap.put("userMsg", "当前的用户无权限");
             }
             return resultMap;
         } catch (Exception e) {
             logger.error("删除设备" + e.getMessage());
+            resultMap.put("errorMsg", "服务器错误");
+        }
+        return resultMap;
+    }
+
+
+    @ApiOperation(value="用户更新设备")
+    @RequestMapping(value = "/updateDevice", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> updateDevice(@RequestBody Device device) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            if (hostHolder.getUser() != null) {
+                if (deviceService.deleteByName(device.getName(), hostHolder.getUser().getId()).get("msg").equals("删除设备成功")){
+                    resultMap = deviceService.addDevice(device.getName(), device.getIndexCode(),device.getResourceType(), hostHolder.getUser().getId());
+                } else {
+                    resultMap.put("notfoundMsg", "不能修改设备名称");
+                }
+            } else {
+                resultMap.put("userMsg", "当前用户无权限");
+            }
+        } catch (Exception e) {
+            logger.error("用户更新设备" + e.getMessage());
             resultMap.put("errorMsg", "服务器错误");
         }
         return resultMap;

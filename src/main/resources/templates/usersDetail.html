@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>jQuery EasyUI CRUD Demo</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/default/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css"/>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/demo/demo.css"/>
+    <style type="text/css">
+        #fm{
+            margin:0;
+            padding:10px 30px;
+        }
+        .ftitle{
+            font-size:14px;
+            font-weight:bold;
+            color:#666;
+            padding:5px 0;
+            margin-bottom:10px;
+            border-bottom:1px solid #ccc;
+        }
+        .fitem{
+            margin-bottom:5px;
+        }
+        .fitem label{
+            display:inline-block;
+            width:80px;
+        }
+    </style>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
+
+    <script type="text/javascript" src="/scripts/usersDetail.js"></script>
+</head>
+
+
+<body>
+
+<div class="demo-info" style="margin-bottom:10px">
+    <div class="demo-tip icon-tip">&nbsp;</div>
+</div>
+
+<div id="table-div">
+    <table id="dg" title="我的用户" class="easyui-datagrid" style="width:800px;height:400px"
+           url="/admin/viewUsers"
+           method="get"
+           toolbar="#toolbar" pagination="true"
+           rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+        <tr>
+            <th field="name" width="50">用户名</th>
+            <th field="password" width="50">用户密码（已加密）</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+
+
+<div id="toolbar">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addUser()">添加用户</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">编辑用户</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="removeUser()"> 删除用户</a>
+</div>
+
+
+<!--添加用户对话框-->
+<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">用户信息</div>
+    <form id="fm" method="post" novalidate="novalidate">
+
+        <div class="fitem">
+            <label>用户名</label>
+            <input name="name" class="easyui-validatebox" id="userName" required="true" />
+        </div>
+
+        <div class="fitem">
+            <label>用户密码</label>
+            <input name="password" class="easyui-validatebox" required="true" />
+        </div>
+
+
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok"  onclick="saveUser()">保存</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+</div>
+</body>
+</html>

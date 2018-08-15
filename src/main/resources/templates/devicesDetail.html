@@ -29,21 +29,90 @@
     </style>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
     <script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            var url = "/user/viewDevices";
-            $.get(url, function (data) {
-                var jsonData = JSON.parse(data.toString())
-                if (jsonData.emptyMsg != null) {
-                    // $("#table-div").hide();
-                    alert(jsonData.emptyMsg);
-                }
-            })
+    <!--<script type="text/javascript">-->
+        <!--var url;-->
+        <!--function addDevice(){-->
 
+            <!--$('#dlg').dialog('open').dialog('setTitle','添加设备');-->
+            <!--$('#deviceName').removeAttr("readonly");-->
+            <!--$('#fm').form('clear');-->
 
-        });
+            <!--url = '/user/addDevice';-->
+        <!--}-->
 
-    </script>
+        <!--$.fn.serializeObject = function() {-->
+            <!--var o = {};-->
+            <!--var a = this.serializeArray();-->
+            <!--$.each(a, function() {-->
+                <!--if (o[this.name]) {-->
+                    <!--if (!o[this.name].push) {-->
+                        <!--o[this.name] = [ o[this.name] ];-->
+                    <!--}-->
+                    <!--o[this.name].push(this.value || '');-->
+                <!--} else {-->
+                    <!--o[this.name] = this.value || '';-->
+                <!--}-->
+            <!--});-->
+            <!--return o;-->
+        <!--};-->
+
+        <!--function saveDevice() {-->
+            <!--$.ajax({-->
+                    <!--url: url,-->
+                    <!--type: "POST",-->
+                    <!--data : JSON.stringify($('#fm').serializeObject()),-->
+                    <!--contentType:"application/json",-->
+                    <!--success: function (result) {-->
+                        <!--console.log(result.msg);-->
+                        <!--if (result.msg == "设备添加成功") {-->
+                            <!--console.log("same");-->
+                            <!--$('#dlg').dialog('close');-->
+                            <!--$('#dg').datagrid('reload');-->
+                        <!--}-->
+                        <!--else {-->
+                            <!--$('#dlg').dialog('close');-->
+                        <!--}-->
+                    <!--},-->
+                    <!--error: function () {-->
+                        <!--alert(result.msg);-->
+                    <!--}-->
+                <!--}-->
+            <!--)-->
+        <!--}-->
+
+        <!--function removeDevice(){-->
+            <!--var row = $('#dg').datagrid('getSelected');-->
+            <!--url = "/user/delDevice";-->
+            <!--if (row){-->
+                <!--console.log(row.name);-->
+                <!--$.messager.confirm('Confirm','确定要删除设备吗',function(r){-->
+                    <!--if (r){-->
+                        <!--$.post(url,{name:row.name},function(result){-->
+                            <!--if (result.msg == "删除设备成功"){-->
+                                <!--$('#dg').datagrid('reload');	// reload the user data-->
+                            <!--} else {-->
+                                <!--$.messager.show({	// show error message-->
+                                    <!--title: 'Error',-->
+                                    <!--msg: result.msg-->
+                                <!--});-->
+                            <!--}-->
+                        <!--});-->
+                    <!--}-->
+                <!--});-->
+            <!--}-->
+        <!--}-->
+
+        <!--function editDevice(){-->
+            <!--var row = $('#dg').datagrid('getSelected');-->
+            <!--if (row){-->
+                <!--$('#dlg').dialog('open').dialog('setTitle','编辑设备');-->
+                <!--$('#fm').form('load',row);-->
+                <!--$('#deviceName').attr("readonly","true");-->
+                <!--url = '/user/updateDevice';-->
+            <!--}-->
+        <!--}-->
+    <!--</script>-->
+    <script type="text/javascript" src="/scripts/devicesDetail.js"></script>
 </head>
 
 
@@ -54,7 +123,7 @@
 </div>
 
 <div id="table-div">
-    <table id="dg" title="我的设备" class="easyui-datagrid" style="width:700px;height:250px"
+    <table id="dg" title="我的设备" class="easyui-datagrid" style="width:800px;height:400px"
            url="/user/viewDevices"
            method="get"
            toolbar="#toolbar" pagination="true"
@@ -71,10 +140,40 @@
 
 
 
-    <div id="toolbar">
-    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">添加设备</a>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">编辑设备</a>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="removeUser()"> 删除设备</a>
+<div id="toolbar">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addDevice()">添加设备</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editDevice()">编辑设备</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="removeDevice()"> 删除设备</a>
+</div>
+
+
+<!--添加设备对话框-->
+<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">设备信息</div>
+    <form id="fm" method="post" novalidate="novalidate">
+
+        <div class="fitem">
+            <label>设备名称</label>
+            <input name="name" class="easyui-validatebox" id="deviceName" required="true" />
+        </div>
+
+        <div class="fitem">
+            <label>设备类别编号</label>
+            <input name="indexCode" class="easyui-validatebox" required="true" />
+        </div>
+
+        <div class="fitem">
+            <label>资源类型</label>
+            <input name="resourceType" class="easyui-validatebox" required="true" />
+        </div>
+
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok"  onclick="saveDevice()">保存</a>
+    <!--<a href="#" class="easyui-linkbutton" iconCls="icon-ok" id="saveDevice">保存</a>-->
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
 </div>
 </body>
 </html>

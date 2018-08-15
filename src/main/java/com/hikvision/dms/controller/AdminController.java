@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ import java.util.Map;
 
 @Api(value="/admin", tags="用户管理界面")
 @RequestMapping(value = "/admin")
-@RestController
+@Controller
 public class AdminController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
@@ -41,6 +42,7 @@ public class AdminController {
 
     @ApiOperation(value="管理员注册", notes = "管理员注册")
     @RequestMapping(value = "/addAdmin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public Map<String, Object> addAdmin(@RequestBody Admin admin) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
@@ -53,29 +55,31 @@ public class AdminController {
     }
 
     @ApiOperation(value="管理员登录", notes = "管理员登录界面")
-    @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String adminLogin(Model model, @RequestBody Admin admin, HttpServletResponse response) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String adminLogin(Model model, @RequestParam("username") String username,
+                             @RequestParam("password") String password, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            resultMap = adminService.login(admin.getName(), admin.getPassword());
+            resultMap = adminService.login(username, password);
             if (resultMap.containsKey("ticket")) {
                 Cookie cookie = new Cookie("ticket", resultMap.get("ticket").toString());
                 cookie.setPath("/");
                 response.addCookie(cookie);
-                return "redirect:/UsersDetail";
+                return "usersDetail";
             } else {
                 model.addAttribute("msg", resultMap.get("msg"));
-                return "/adminLogin";
+                return "login";
             }
         } catch (Exception e) {
             logger.error("管理员用户登录异常" + e.getMessage());
             resultMap.put("errorMsg", "服务器错误");
-            return "/adminLogin";
+            return "/login";
         }
     }
 
     @ApiOperation(value="添加用户", notes = "管理员添加新用户")
     @RequestMapping(value = "/addUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public Map<String, Object> addUser(@RequestBody User user) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
@@ -88,11 +92,12 @@ public class AdminController {
     }
 
     @ApiOperation(value="删除用户",notes = "管理员删除用户")
-    @RequestMapping(value = "/delUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> delUser(@RequestParam String userName) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+    @RequestMapping(value = "/delUser", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> delUser(@RequestParam String name) {
+        Map<String, Object> resultMap = new HashMap<>();
         try {
-            resultMap = userService.deleteUser(userName);
+            resultMap = userService.deleteUser(name);
         } catch (Exception e) {
             logger.error("删除用户异常" + e.getMessage());
             resultMap.put("errorMsg", "服务器错误");
@@ -100,21 +105,27 @@ public class AdminController {
         return resultMap;
     }
 
-    @ApiOperation(value = "修改用户密码", notes = "管理员修改用户密码")
-    @RequestMapping(value = "/updateUserPassword", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> updateUserPassword(@RequestBody User user) {
+    @ApiOperation(value = "修改用户信息", notes = "管理员修改用户信息")
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> updateUser(@RequestBody User user) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            resultMap = userService.updateUserPassword(user.getName(), user.getPassword());
+            if (hostHolder.getAdmin() != null) {
+                userService.deleteUser(user.getName());
+                resultMap = userService.addUser(user.getName(), user.getPassword());
+            }
+
         } catch (Exception e) {
-            logger.error("更新密码失败" + e.getMessage());
+            logger.error("修改用户信息" + e.getMessage());
             resultMap.put("errorMsg", "服务器错误");
         }
         return resultMap;
     }
 
     @ApiOperation(value = "查看所有用户", notes = "管理员查看所有用户")
-    @RequestMapping(value = "/viewAllUsers", method = RequestMethod.GET)
+    @RequestMapping(value = "/viewUsers", method = RequestMethod.GET)
+    @ResponseBody
     public List<User> viewAllUsers() {
         List<User> users = new ArrayList<>();
         try {
