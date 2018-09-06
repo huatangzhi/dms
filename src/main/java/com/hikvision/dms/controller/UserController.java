@@ -57,7 +57,7 @@ public class UserController {
                 return "login";
             }
         } catch (Exception e) {
-            logger.error("管理员用户登录异常" + e.getMessage());
+            logger.error("用户登录异常" + e.getMessage());
             resultMap.put("errorMsg", "服务器错误");
             return "login";
         }
@@ -108,11 +108,8 @@ public class UserController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             if (hostHolder.getUser() != null) {
-                if (deviceService.deleteByName(device.getName(), hostHolder.getUser().getId()).get("msg").equals("删除设备成功")){
-                    resultMap = deviceService.addDevice(device.getName(), device.getIndexCode(),device.getResourceType(), hostHolder.getUser().getId());
-                } else {
-                    resultMap.put("notfoundMsg", "不能修改设备名称");
-                }
+                deviceService.deleteByName(device.getName(), hostHolder.getUser().getId());
+                resultMap = deviceService.addDevice(device.getName(), device.getIndexCode(),device.getResourceType(), hostHolder.getUser().getId());
             } else {
                 resultMap.put("userMsg", "当前用户无权限");
             }
@@ -147,20 +144,13 @@ public class UserController {
         }
         return JSON.toJSONString(resultMap);
     }
-//
-//    @ApiOperation(value = "修改用户密码", notes = "管理员修改用户密码")
-//    @RequestMapping(value = "/updateUserPassword", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public Map<String, Object> updateUserPassword(@RequestBody User user) {
-//        Map<String, Object> resultMap = new HashMap<>();
-//        try {
-//            resultMap = userService.updateUserPassword(user.getName(), user.getPassword());
-//        } catch (Exception e) {
-//            logger.error("更新密码失败" + e.getMessage());
-//            resultMap.put("errorMsg", "服务器错误");
-//        }
-//        return resultMap;
-//    }
-//
 
 
+
+    @ApiOperation(value = "用户登出")
+    @RequestMapping(value = "/logout", method = {RequestMethod.POST, RequestMethod.GET})
+    public String logout(@CookieValue("userTicket") String ticket){
+        userService.logout(ticket);
+        return "redirect:/";
+    }
 }

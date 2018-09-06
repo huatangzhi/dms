@@ -1,7 +1,6 @@
 package com.hikvision.dms.configuration;
 
 import com.hikvision.dms.interceptor.AdminLoginRequiredInterceptor;
-import com.hikvision.dms.interceptor.AdminPassportInterceptor;
 import com.hikvision.dms.interceptor.UserLoginRequiredInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,8 +18,7 @@ public class DMSConfiguration  extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(adminPassportInterceptor).addPathPatterns("/admin/addUser");
-        registry.addInterceptor(adminLoginRequiredInterceptor).addPathPatterns("/admin/addUser","/admin/delUser", "/admin/updateUser");
+        registry.addInterceptor(adminLoginRequiredInterceptor).addPathPatterns("/admin/addUser","/admin/delUser", "/admin/updateUser", "/admin/viewUsers");
         registry.addInterceptor(userLoginRequiredInterceptor).addPathPatterns("/user/addDevice","/user/delDevice", "/user/viewDevices","/user/updateDevice");
         super.addInterceptors(registry);
     }

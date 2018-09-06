@@ -5,7 +5,6 @@
     $('#dlg').dialog('open').dialog('setTitle','添加设备');
     $('#deviceName').removeAttr("readonly");
     $('#fm').form('clear');
-
     url = '/user/addDevice';
 }
 
@@ -37,8 +36,12 @@
                     console.log("same");
                     $('#dlg').dialog('close');
                     $('#dg').datagrid('reload');
-                }
-                else {
+                } else if (result.msg == "该设备已存在") {
+                    // console.log(result.msg);
+                    // $('#dlg').dialog('close');
+                    alert(result.msg);
+                } else {
+
                     $('#dlg').dialog('close');
                 }
             },
@@ -50,26 +53,27 @@
 }
 
     function removeDevice(){
-    var row = $('#dg').datagrid('getSelected');
-    url = "/user/delDevice";
-    if (row){
-    console.log(row.name);
-    $.messager.confirm('Confirm','确定要删除设备吗',function(r){
-    if (r){
-    $.post(url,{name:row.name},function(result){
-    if (result.msg == "删除设备成功"){
-    $('#dg').datagrid('reload');	// reload the user data
-} else {
-    $.messager.show({	// show error message
-    title: 'Error',
-    msg: result.msg
-});
-}
-});
-}
-});
-}
-}
+        var row = $('#dg').datagrid('getSelected');
+        url = "/user/delDevice";
+        if (row){
+            console.log(row.name);
+            $.messager.confirm('Confirm','确定要删除设备吗',function(r){
+                if (r){
+                    $.post(url,{name:row.name},function(result){
+                        $('#dg').datagrid('reload');
+                        // if (result.msg == "设备删除成功"){
+                        //     	// reload the user data
+                        // } else {
+                        //     $.messager.show({	// show error message
+                        //         title: 'Error',
+                        //         msg: result.msg
+                        //     });
+                        // }
+                    });
+                }
+            });
+        }
+    }
 
     function editDevice(){
     var row = $('#dg').datagrid('getSelected');
@@ -80,3 +84,8 @@
     url = '/user/updateDevice';
 }
 }
+
+    function userLogout() {
+        console("logout");
+        $.post("/user/logout");
+    }

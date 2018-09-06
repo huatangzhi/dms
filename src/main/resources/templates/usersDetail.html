@@ -2,7 +2,7 @@
 <html  xmlns:th="http://www.thymeleaf.org">
 <head>
 
-    <title>jQuery EasyUI CRUD Demo</title>
+    <title>用户管理</title>
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/default/easyui.css"/>
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css"/>
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/demo/demo.css"/>
@@ -41,15 +41,15 @@
 </div>
 
 <div id="table-div">
-    <table id="dg" title="我的用户" class="easyui-datagrid" style="width:800px;height:400px"
+    <table id="dg" title="我的用户" class="easyui-datagrid" style="width:1000px;height:450px"
            url="/admin/viewUsers"
            method="get"
-           toolbar="#toolbar" pagination="true"
+           toolbar="#toolbar"
            rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
         <tr>
             <th field="name" width="50">用户名</th>
-            <th field="password" width="50">用户密码（已加密）</th>
+            <th field="password" width="256">用户密码（已加密）</th>
         </tr>
         </thead>
     </table>
@@ -61,6 +61,7 @@
     <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addUser()">添加用户</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">编辑用户</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="removeUser()"> 删除用户</a>
+    <a href="/admin/logout" class="easyui-linkbutton" iconCls="icon-remove" plain="true"> 管理员登出</a>
 </div>
 
 
@@ -85,7 +86,7 @@
 </div>
 <div id="dlg-buttons">
     <a href="#" class="easyui-linkbutton" iconCls="icon-ok"  onclick="saveUser()">保存</a>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
 </div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.hikvision.dms;
 
 import com.hikvision.dms.mapper.DeviceMapper;
+import com.hikvision.dms.mapper.LoginTicketMapper;
 import com.hikvision.dms.mapper.UserDeviceMapper;
 import com.hikvision.dms.mapper.UserMapper;
 import com.hikvision.dms.model.Device;
@@ -8,6 +9,7 @@ import com.hikvision.dms.model.User;
 import com.hikvision.dms.model.UserDeviceRecord;
 import com.hikvision.dms.service.DeviceService;
 import com.hikvision.dms.service.UserService;
+import com.hikvision.dms.util.SHA256Util;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -36,10 +38,15 @@ public class DmsApplicationTests {
     @Autowired
     private DeviceMapper deviceMapper;
 
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
 
     @Autowired
     private UserDeviceMapper userDeviceMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Test
     public void contextLoads() {
@@ -68,7 +75,7 @@ public class DmsApplicationTests {
         Map<String, Object> result = new HashMap<>();
 //        result = deviceService.addDevice(id, indexCode, resourceType);
 //        result = deviceService.getDeviceById(1234);
-        logger.info(result.toString());
+       deviceService.deleteByName("2", 27);
 
     }
 
@@ -80,7 +87,12 @@ public class DmsApplicationTests {
 //        userDeviceMapper.addUserDeviceRecord(userDeviceRecord);
 //        List<Integer> resultList = userDeviceMapper.getUserDevicesId(1234);
 //        logger.info(resultList.toString());
-        userDeviceMapper.deleteDeviceById(14, 1235);
+
+    }
+
+    @Test
+    public  void LoginTicketTest() {
+        loginTicketMapper.delTicket(28);
     }
 
     @Test
@@ -93,6 +105,20 @@ public class DmsApplicationTests {
         int result  = deviceMapper.deleteByName("root1");
 
         logger.info("result" + String.valueOf(result));
+
+    }
+
+    @Test
+    public void testBuilder() {
+        UserBuild userBuild = new UserBuild.UserBuilder().build();
+
+        User user = new User();
+        for (int i = 5; i < 100; i++){
+            user.setName(userBuild.getName() + i);
+            user.setSalt(userBuild.getSalt());
+            user.setPassword(SHA256Util.SHA256(user.getPassword() + user.getSalt()));
+            userMapper.addUser(user);
+        }
 
     }
 

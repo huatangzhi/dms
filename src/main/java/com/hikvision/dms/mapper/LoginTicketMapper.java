@@ -13,7 +13,7 @@ public interface LoginTicketMapper {
             ") values (#{userId},#{expired},#{status},#{ticket})"})
     int addTicket(LoginTicket ticket);
 
-    @Delete({"delete from ", TABLE_NAME, "where user_id=#{userID}"})
+    @Delete({"delete from ", TABLE_NAME, "where user_id=#{userId}"})
     int delTicket(int userId);
 
     @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where ticket=#{ticket}"})

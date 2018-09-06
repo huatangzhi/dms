@@ -19,13 +19,22 @@ public interface DeviceMapper {
     @Delete({"delete from ", TABLE_NAME, " where id=#{id}"})
     int deleteById(int id);
 
+    @Delete("<script>"+
+            "delete from "+ TABLE_NAME + " where id in"
+            + "<foreach item='item' index='index' collection='deviceIds' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    int deleteByIds(@Param("deviceIds") List<Integer> deviceIds);
+
     @Delete({"delete from ", TABLE_NAME, " where name=#{name}"})
     int deleteByName(String name);
+
 
     @Update({"update ", TABLE_NAME, "set name=#{name}, index_code=#{indexCode}, resource_type=#{resourceType} where id=#{id}"})
     int updateDevice(Device device);
 
-    @Select({"select * from ", TABLE_NAME, " where id=#{id}"})
+    @Select({"deltefrom ", TABLE_NAME, " where id=#{id}"})
     Device selectById(int id);
 
     @Select({"select * from ", TABLE_NAME, " where name=#{name}"})

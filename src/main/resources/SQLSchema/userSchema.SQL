@@ -1,4 +1,4 @@
-  DROP TABLE IF EXISTS `user`;
+  DROP TABLE IF EXISTS user;
   CREATE TABLE `user` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(64) NOT NULL DEFAULT '',

@@ -129,11 +129,21 @@ public class AdminController {
     public List<User> viewAllUsers() {
         List<User> users = new ArrayList<>();
         try {
-            users = userService.getAllUsers();
+            if (hostHolder.getAdmin() != null) {
+                users = userService.getAllUsers();
+            }
         } catch (Exception e) {
             logger.error("查看所有用户" + e.getMessage());
         }
         return users;
+    }
+
+
+    @ApiOperation(value = "管理员登出")
+    @RequestMapping(value = "/logout", method = {RequestMethod.POST, RequestMethod.GET})
+    public String logout(@CookieValue("ticket") String ticket){
+        adminService.logout(ticket);
+        return "redirect:/";
     }
 
 

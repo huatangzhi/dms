@@ -32,4 +32,7 @@ public interface UserMapper {
 
     @Delete({"delete from ", TABLE_NAME, " where id=#{id}"})
     void deleteById(int id);
+
+    @Delete({"delete from ", TABLE_NAME, " where name=#{name}"})
+    void deleteByName(String name);
 }

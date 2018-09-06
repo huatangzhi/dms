@@ -67,16 +67,14 @@ public class AdminService {
 
         Admin admin = adminMapper.selectByName(userName);
 
-        if (admin == null) {
-            map.put("msg", "管理员用户名不存在");
+        if (admin == null || !SHA256Util.SHA256(password + admin.getSalt()).equals(admin.getPassword())) {
+            map.put("msg", "管理员用户名或密码不存在");
             return map;
         }
 
-        if (!SHA256Util.SHA256(password + admin.getSalt()).equals(admin.getPassword())) {
-            map.put("msg", "管理员密码不正确");
-            return map;
+        if (getLoginTicket(admin.getId()) != null) {
+            adminLoginTicketMapper.delTicket(admin.getId());
         }
-
         String ticket = addLoginTicket(admin.getId());
 
         map.put("ticket", ticket);
@@ -104,6 +102,19 @@ public class AdminService {
         ticket.setTicket(UUID.randomUUID().toString().replaceAll("-", ""));
         adminLoginTicketMapper.addTicket(ticket);
         return ticket.getTicket();
+    }
+
+    private String getLoginTicket(int userId) {
+        AdminLoginTicket ticket = adminLoginTicketMapper.selectByUserId(userId);
+        if (ticket != null) {
+            return ticket.getTicket();
+        } else{
+            return null;
+        }
+    }
+
+    public void logout(String ticket) {
+        adminLoginTicketMapper.updateStatus(ticket, 1);
     }
 
 }

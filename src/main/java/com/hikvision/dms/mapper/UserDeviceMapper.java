@@ -21,5 +21,12 @@ public interface UserDeviceMapper {
     List<Integer> getUserDevicesById(int userId);
 
     @Delete({"delete from ", TABLE_NAME , " where user_id=#{userId} and device_id=#{deviceId}"})
-    int deleteDeviceById(@Param("userId")int userId, @Param("deviceId")int deviceId);
+    int deleteDeviceByUserIdAndDeviceId(@Param("userId")int userId, @Param("deviceId")int deviceId);
+
+    @Delete({"delete from ", TABLE_NAME , " where user_id=#{userId}"})
+    int deleteDeviceByUserId(@Param("userId")int userId);
+
+    @Delete({"delete from ", TABLE_NAME , " where device_id=#{deviceId}"})
+    int deleteDeviceByDeviceId(@Param("deviceId")int deviceId);
+
 }

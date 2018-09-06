@@ -108,12 +108,44 @@ public class DeviceService {
             reslutMap.put("msg", "没有该设备");
             return reslutMap;
         } else {
+            userDeviceMapper.deleteDeviceByUserIdAndDeviceId(userId, device.getId());
             deviceMapper.deleteByName(deviceName);
-            userDeviceMapper.deleteDeviceById(userId, device.getId());
             reslutMap.put("msg", "删除设备成功");
         }
         return reslutMap;
     }
+
+    public Map<String, Object> deleteById(int deviceId) {
+        Map<String,Object> reslutMap = new HashMap<String, Object>();
+
+        Device device = deviceMapper.selectById(deviceId);
+        if ( device == null) {
+            reslutMap.put("msg", "没有该设备");
+            return reslutMap;
+        } else {
+            deviceMapper.deleteById(deviceId);
+            userDeviceMapper.deleteDeviceByDeviceId(deviceId);
+            reslutMap.put("msg", "删除设备成功");
+        }
+        return reslutMap;
+    }
+
+    public Map<String, Object> deleteById(List<Integer> deviceIds) {
+        Map<String,Object> reslutMap = new HashMap<String, Object>();
+
+        List<Device> deviceList = deviceMapper.selectByIds(deviceIds);
+        if ( deviceList == null) {
+            reslutMap.put("msg", "没有该设备");
+            return reslutMap;
+        } else {
+            deviceMapper.deleteByIds(deviceIds);
+            reslutMap.put("msg", "删除设备成功");
+        }
+        return reslutMap;
+    }
+
+
+
 
     public List<Device> getDeviceByUserId(int userId) {
         List<Integer> deviceIds = userDeviceMapper.getUserDevicesById(userId);

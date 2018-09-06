@@ -30,7 +30,7 @@ public class UserService {
     private LoginTicketMapper loginTicketMapper;
 
     @Autowired
-    private DeviceMapper deviceMapper;
+    private DeviceService deviceService;
 
     @Autowired
     private UserDeviceMapper userDeviceMapper;
@@ -80,20 +80,23 @@ public class UserService {
         }
 
         User user = userMapper.selectByName(userName);
-        if ( user != null) {
-            userMapper.deleteById(user.getId());
-
+        if (user != null) {
+            List<Integer> deviceIds = userDeviceMapper.getUserDevicesById(user.getId());
+            if (deviceIds.size() == 1) {
+                deviceService.deleteById(deviceIds.get(0));
+                userDeviceMapper.deleteDeviceByUserId(userMapper.selectByName(userName).getId());
+            } else if (deviceIds.size() > 1) {
+                deviceService.deleteById(deviceIds);
+                userDeviceMapper.deleteDeviceByUserId(userMapper.selectByName(userName).getId());
+            }
             if (loginTicketMapper.selectByUserId(user.getId()) != null) {
                 loginTicketMapper.delTicket(user.getId());
             }
-//            List<Integer> deviceIds = userDeviceMapper.getUserDevicesById(user.getId());
-//            deviceMapper.de
-
+            userMapper.deleteByName(userName);
             resultMap.put("msg", "用户删除成功");
         } else {
             resultMap.put("msg", "没有该用户");
         }
-
         return resultMap;
     }
 
@@ -148,15 +151,23 @@ public class UserService {
         User user = userMapper.selectByName(userName);
 
         if (user == null) {
-            map.put("msg", "用户名不存在");
+            map.put("msg", "用户名或密码不正确");
             return map;
         }
 
         if (!SHA256Util.SHA256(password+user.getSalt()).equals(user.getPassword())) {
-            map.put("msg", "密码不正确");
+            map.put("msg", "用户名或密码不正确");
             return map;
         }
 
+        String ticket1 = getLoginTicket(user.getId());
+
+        if (ticket1 != null) {
+            loginTicketMapper.delTicket(user.getId());
+        }
+//        if (getLoginTicket(user.getId()) != null){
+//
+//        }
         String ticket = addLoginTicket(user.getId());
         map.put("userTicket", ticket);
         map.put("userId", user.getId());
@@ -173,5 +184,18 @@ public class UserService {
         ticket.setTicket(UUID.randomUUID().toString().replaceAll("-", ""));
         loginTicketMapper.addTicket(ticket);
         return ticket.getTicket();
+    }
+
+    private String getLoginTicket(int userId) {
+        LoginTicket ticket = loginTicketMapper.selectByUserId(userId);
+        if (ticket != null) {
+            return ticket.getTicket();
+        } else{
+            return null;
+        }
+    }
+
+    public void logout(String ticket) {
+        loginTicketMapper.updateStatus(ticket, 1);
     }
 }

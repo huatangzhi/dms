@@ -44,14 +44,14 @@ public class AdminLoginRequiredInterceptor implements HandlerInterceptor {
             AdminLoginTicket adminLoginTicket = adminLoginTicketMapper.selectByTicket(ticket);
 
             if (adminLoginTicket == null || adminLoginTicket.getExpired().before(new Date()) || adminLoginTicket.getStatus() != 0) {
-                httpServletResponse.sendRedirect("/reglogin?" + httpServletRequest.getRequestURI());
+                httpServletResponse.sendRedirect("/" );
                 return false;
             }
             Admin admin = adminMapper.selectById(adminLoginTicket.getUserId());
             hostHolder.setAdmin(admin);
             return true;
         }
-        httpServletResponse.sendRedirect("/reglogin?" + httpServletRequest.getRequestURI());
+        httpServletResponse.sendRedirect("/" );
         return false;
     }
 

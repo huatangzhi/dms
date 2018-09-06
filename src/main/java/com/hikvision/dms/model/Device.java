@@ -1,6 +1,5 @@
 package com.hikvision.dms.model;
 
-import org.springframework.stereotype.Component;
 
 public class Device {
 
@@ -8,6 +7,9 @@ public class Device {
     String name;
     int indexCode;
     String resourceType;
+
+
+
 
     public int getId() {
         return id;
@@ -50,4 +52,6 @@ public class Device {
                 ", resourceType='" + resourceType + '\'' +
                 '}';
     }
+
+
 }

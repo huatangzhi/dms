@@ -1,0 +1,31 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>用户登录界面</title>
+</head>
+
+<body>
+
+        <form  id="regloginform" method="post">
+            <div class="group-inputs">
+                <div class="email input-wrapper">
+                    <input type="text" name="username" aria-label="用户名" placeholder="用户名" required=""/>
+
+                </div>
+                <div class="input-wrapper">
+                    <input type="password" name="password" aria-label="密码" placeholder="密码" required=""/>
+                </div>
+            </div>
+            <div class="button-wrapper command clearfix">
+                <button class="sign-button submit" type="submit" onclick="form=document.getElementById('regloginform');form.action='/user/login'">用户登录</button>
+                <button class="sign-button submit" type="submit" onclick="form=document.getElementById('regloginform');form.action='/admin/login'">管理员登录</button>
+            </div>
+        </form>
+
+        <p th:text="${msg}"/>
+
+</body>
+
+</html>
+

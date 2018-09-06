@@ -1,29 +1,50 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:p="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="UTF-8" />
     <title>用户登录界面</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.0.1/css/bootstrap.css" rel="stylesheet"/>
 </head>
 
 <body>
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-8 column">
 
-        <form  id="regloginform" method="post">
-            <div class="group-inputs">
-                <div class="email input-wrapper">
-                    <input type="text" name="username" aria-label="用户名" placeholder="用户名" required=""/>
+            <div class="jumbotron" style="position:absolute; top: 150px" >
 
-                </div>
-                <div class="input-wrapper">
-                    <input type="password" name="password" aria-label="密码" placeholder="密码" required=""/>
-                </div>
+                <h3 style="position: center">
+                    海康威视设备管理系统
+                </h3>
+
+                <p>
+                    海康威视是以视频为核心的物联网解决方案提供商，面向全球提供综合安防、智慧业务与大数据服务。
+                </p>
             </div>
-            <div class="button-wrapper command clearfix">
-                <button class="sign-button submit" type="submit" onclick="form=document.getElementById('regloginform');form.action='/user/login'">用户登录</button>
-                <button class="sign-button submit" type="submit" onclick="form=document.getElementById('regloginform');form.action='/admin/login'">管理员登录</button>
-            </div>
-        </form>
+        </div>
 
-        <p th:text="${msg}"/>
+        <div class="col-md-4 column">
+            <form role="form" id="regloginform" method="post" style="position:absolute;right: 10px; top: 150px">
+                <div class="form-group">
+                    <label >用户名</label><input type="text" name="username" placeholder="用户名" required="required" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label >密码</label><input type="password" name="password" placeholder="密码" required="required" class="form-control" />
+                </div>
+
+                <div class="button-wrapper command clearfix">
+                    <button class="sign-button submit" type="submit" onclick="form=document.getElementById('regloginform');form.action='/user/login'">用户登录</button>
+                    <button class="sign-button submit" type="submit" onclick="form=document.getElementById('regloginform');form.action='/admin/login'">管理员登录</button>
+                </div>
+                <p th:text="${msg}" style="position: relative; top: 20px;" />
+            </form>
+
+        </div>
+
+
+
+    </div>
+</div>
 
 </body>
 
